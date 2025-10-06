@@ -15,9 +15,13 @@ Stabilire una connessione di base in cui un client invia un singolo messaggio a 
 Creare un server che rispedisce al client lo stesso messaggio che ha ricevuto (echo). Dopo questo scambio, entrambe le applicazioni terminano.
 
 ---
+## Esercizio 2.5: Echo Server Multiplo (Uso Singolo)
+Creare un server che rispedisce al client i messaggi che riceve finché il client non invia il messaggio "exit". Dopodiché entrambe le applicazioni terminano.
 
+---
 ## Esercizio 3: Echo Server Persistente
 Modificare il server dell'esercizio precedente in modo che non termini dopo aver gestito un client. Deve invece rimanere attivo e in ascolto, pronto a servire un nuovo client dopo aver concluso con il precedente.
+Riusare il client del precedente esercizio.
 
 ---
 
