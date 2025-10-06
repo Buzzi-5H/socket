@@ -1,16 +1,29 @@
-// Aggiungi gli import necessari
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class EchoServer {
-    public static void main(String[] args) {
-        try {
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(12345);
+        System.out.println("Echo Server in attesa di connessioni...");
 
-          // Leggi il messaggio del client e invia come risposta lo stesso messaggio,
+        Socket clientSocket = serverSocket.accept();
+        System.out.println("Client connesso: " + clientSocket.getInetAddress());
 
-        } catch (Exception e) {
-            System.err.println("Errore: " + e.getMessage());
-        } finally {
+        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 
-        }
+        String messaggio = in.readLine();
+        System.out.println("Ricevuto: " + messaggio);
+
+        out.println(messaggio);
+        System.out.println("Risposto con: " + messaggio);
+
+        clientSocket.close();
+        serverSocket.close();
 
         System.out.println("Server terminato.");
     }
