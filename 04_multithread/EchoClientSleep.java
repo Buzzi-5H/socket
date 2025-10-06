@@ -1,6 +1,6 @@
 // Aggiungi gli import necessari
 
-public class EchoClient {
+public class EchoClientSleep {
   public static void main(String[] args) {
 
     // Invia 10 messaggi e stampa la risposta del server.
