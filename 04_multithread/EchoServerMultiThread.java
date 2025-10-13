@@ -1,19 +1,63 @@
-// Aggiungi gli import necessari
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class EchoServerMultiThread {
   public static void main(String[] args) {
 
-  // Accetta connessioni da più client.
-  // Lancia un therad per ogni connessione con un client
-  // Usa new Thread(runnableObject).start() per lanciare un thread
+      try (ServerSocket serverSocket = new ServerSocket(12345)) {
+          System.out.println("Server in attesa di connessioni...");
+          try {
+              while (true) {
+                  Socket clientSocket = serverSocket.accept();
+                  System.out.println("Client connesso: " + clientSocket.getInetAddress() + " " + clientSocket.getPort());
+                  ClientHandler clientHandler = new ClientHandler(clientSocket);
+                  new Thread(clientHandler).start();
+              }
+          } catch (IOException e) {
+              e.printStackTrace();
+          }
+      } catch (Exception e) {
+          System.err.println("Errore nel server: " + e.getMessage());
+      }
+
+      System.out.println("Server terminato.");
 
   }
 }
 
 
 class ClientHandler implements Runnable {
+    Socket clientSocket;
+
+    public ClientHandler(Socket clientSocket) {
+        this.clientSocket = clientSocket;
+    }
+
     @Override
     public void run() {
-      // Gestisci un singolo client
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+
+            String messaggio;
+            while ((messaggio = in.readLine()) != null) {
+                System.out.println("Ricevuto: " + messaggio);
+
+                out.println(messaggio);
+                System.out.println("Risposto con: " + messaggio);
+            }
+        } catch (Exception e) {
+            System.err.println("Errore nel thread: " + e.getMessage());
+        } finally {
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
